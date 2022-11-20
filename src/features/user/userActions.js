@@ -7,7 +7,7 @@ export const userLogin = createAsyncThunk(
   'user/login',
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const { headers, data } = await axios.post(
+      const { data } = await axios.post(
         'auth/users/sign_in',
         { email, password }, { withCredentials: true }
       )
@@ -27,7 +27,8 @@ export const userLogout = createAsyncThunk(
   'user/logout',
   async (arg, { rejectWithValue }) => {
     try {
-      const { headers, data } = await axios.delete('auth/users/sign_out', { withCredentials: true })
+      const { data } = await axios.delete('auth/users/sign_out', { withCredentials: true })
+
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -43,12 +44,12 @@ export const registerUser = createAsyncThunk(
   'user/register',
   async ({ username, email, password }, { rejectWithValue }) => {
     try {
-      const { headers, data } = await axios.post(
+      const data = await axios.post(
         '/auth/users/sign_up',
         { username, email, password }
       )
 
-      return { refreshToken: headers['refresh-token'], accessToken: headers['access-token'],  data }
+      return data?.data?.data;
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message)
@@ -64,7 +65,8 @@ export const getUserDetails = createAsyncThunk(
   async (arg, { rejectWithValue }) => {
     try {
       const data = await axios.get(`/user-info`, { withCredentials: true });
-      return data?.data?.data
+
+      return data?.data?.data;
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message)
