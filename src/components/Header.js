@@ -1,46 +1,59 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
-import { NavLink } from 'react-router-dom'
-import { getUserDetails, userLogout } from "../features/user/userActions";
-import { logout } from '../features/user/userSlice'
-import '../styles/header.css'
+import { getUserDetails, userLogout } from "../redux/user/userActions";
+import {
+  Logo,
+  StyledButton,
+  StyledNav,
+  StyledLogo,
+  StyledHeader,
+  StyledNavLink,
+  StyledDropDown,
+  StyledDropDownContent
+} from "./styled/styles";
+
+import styled from "styled-components";
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
-  // automatically authenticate user if token is found
+  const [isDropdownActive, setDropdownState] = useState(false);
   useEffect(() => {
-    if (!userInfo) {
-      dispatch(getUserDetails())
-    }
+    dispatch(getUserDetails())
   }, [])
 
   return (
-    <header>
-      <div className='header-status'>
-        <span>
-          { userInfo ? `Logged in as ${userInfo.email}` : "You're not logged in"}
-        </span>
-        <div className='cta'>
-          {userInfo ? (
-            <button className='button' onClick={() => dispatch(userLogout())}>
-              Logout
-            </button>
-          ) : (
-            <NavLink className='button' to='/login'>
-              Login
-            </NavLink>
-          )}
-        </div>
-      </div>
-      <nav className='container navigation'>
-        <NavLink to='/'>Home</NavLink>
-        <NavLink to='/login'>Login</NavLink>
-        <NavLink to='/register'>Register</NavLink>
-        <NavLink to='/user-profile'>Profile</NavLink>
-      </nav>
-    </header>
+    <StyledHeader>
+      <StyledNav>
+        <StyledNavLink to='/'><StyledLogo src={Logo}/></StyledNavLink>
+      </StyledNav>
+
+      <StyledNav>
+        { userInfo ? (
+          <>
+            <StyledDropDown to='/user-profile'>
+              <>
+                {userInfo?.username}
+                <StyledDropDownContent>
+                  <StyledNavLink to='/user-profile'>Profile</StyledNavLink>
+                    <hr/>
+                  <StyledNavLink onClick={() => dispatch(userLogout())}>
+                    Logout
+                  </StyledNavLink>
+                </StyledDropDownContent>
+              </>
+            </StyledDropDown>
+
+          </>
+        ) : (
+          <>
+            <StyledNavLink to='/register'>Register</StyledNavLink>
+            <StyledNavLink to='/login'>Login</StyledNavLink>
+          </>
+        )}
+      </StyledNav>
+    </StyledHeader>
   )
 }
 

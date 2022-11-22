@@ -4,7 +4,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
 import HomePage from './pages/HomePage'
-import ProtectedRoute from './features/routing/ProtectedRoute'
+import ProtectedRoute from './features/ProtectedRoute'
 import './App.css'
 
 function App() {

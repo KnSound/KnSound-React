@@ -1,8 +1,7 @@
 import { useSelector } from 'react-redux'
-import '../styles/profile.css'
 import { useEffect } from "react";
 import { useDispatch } from 'react-redux'
-import { getUserDetails } from '../features/user/userActions'
+import { getUserDetails } from '../redux/user/userActions'
 
 const ProfilePage = () => {
   const { userInfo } = useSelector((state) => state.user)

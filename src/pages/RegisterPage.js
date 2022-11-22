@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Error from '../components/Error'
-import { registerUser } from '../features/user/userActions'
+import { registerUser } from '../redux/user/userActions'
 
 const RegisterPage = () => {
   const [customError, setCustomError] = useState(null)

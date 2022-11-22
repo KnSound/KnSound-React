@@ -1,10 +1,11 @@
 import axios from "axios";
-import { getUserDetails } from "../../features/user/userActions";
+import { getUserDetails } from "../../redux/user/userActions";
 let store;
 
 export const injectStore = _store => {
   store = _store
 }
+
 axios.defaults.withCredentials = true;
 
 let refresh = false;

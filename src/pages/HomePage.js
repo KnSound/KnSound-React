@@ -1,5 +1,11 @@
+import { Dropdown } from "semantic-ui-react";
+
 const HomePage = () => {
-  return <h1>User Authentication with Redux Toolkit & JWTs</h1>
+  return(
+    <>
+      Home page
+    </>
+  )
 }
 
 export default HomePage

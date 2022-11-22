@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import '../../app/interceptors/axios'
+import '../../features/interceptors/axios'
 
 
 export const userLogin = createAsyncThunk(

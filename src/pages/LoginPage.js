@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { userLogin } from '../features/user/userActions'
+import { userLogin } from '../redux/user/userActions'
 import { useEffect } from 'react'
 import Error from '../components/Error'
 
