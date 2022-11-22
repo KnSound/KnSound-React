@@ -39,7 +39,6 @@ export const StyledDropDownContent = styled.div`
   transition: .1s ease-in-out;
   padding: 12px 16px;
 
-
   &:hover {
     display: block;
   }
@@ -47,7 +46,9 @@ export const StyledDropDownContent = styled.div`
 
 export const StyledDropDown = styled(StyledNavLink)`
   position: relative;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  gap: 0px;
 
   &:hover ${StyledDropDownContent} {
     display: block;

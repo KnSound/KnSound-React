@@ -11,6 +11,11 @@ import {
   StyledDropDown,
   StyledDropDownContent
 } from "./styled/styles";
+import { AiOutlineHeart } from "react-icons/ai";
+import { BsPerson } from "react-icons/bs";
+import { RiPlayListFill } from "react-icons/ri";
+import { MdLogout } from "react-icons/md"
+import { IoMdArrowDropdown } from "react-icons/io"
 
 import styled from "styled-components";
 
@@ -18,7 +23,6 @@ const Header = () => {
   const { userInfo } = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
-  const [isDropdownActive, setDropdownState] = useState(false);
   useEffect(() => {
     dispatch(getUserDetails())
   }, [])
@@ -34,12 +38,14 @@ const Header = () => {
           <>
             <StyledDropDown to='/user-profile'>
               <>
-                {userInfo?.username}
+                {userInfo?.username} <IoMdArrowDropdown/>
                 <StyledDropDownContent>
-                  <StyledNavLink to='/user-profile'>Profile</StyledNavLink>
-                    <hr/>
+                  <StyledNavLink to='/user-profile'><BsPerson/>Profile</StyledNavLink>
+                  <StyledNavLink to='#'><RiPlayListFill/>Playlists</StyledNavLink>
+                  <StyledNavLink to='#'><AiOutlineHeart/>Likes</StyledNavLink>
+                  <hr/>
                   <StyledNavLink onClick={() => dispatch(userLogout())}>
-                    Logout
+                    <MdLogout/>Logout
                   </StyledNavLink>
                 </StyledDropDownContent>
               </>
