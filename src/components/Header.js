@@ -10,7 +10,7 @@ import {
   StyledNavLink,
   StyledDropDown,
   StyledDropDownContent
-} from "./styled/styles";
+} from "../styled/styles";
 import { AiOutlineHeart } from "react-icons/ai";
 import { BsPerson } from "react-icons/bs";
 import { RiPlayListFill } from "react-icons/ri";
