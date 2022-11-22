@@ -21,7 +21,7 @@ const userSlice = createSlice({
     [userLogin.fulfilled]: (state, { payload }) => {
       state.loading = false
       state.success = true
-      state.userInfo = payload.data
+      state.userInfo = payload?.data
     },
     [userLogin.rejected]: (state, { payload }) => {
       state.loading = false
@@ -49,7 +49,7 @@ const userSlice = createSlice({
     [registerUser.fulfilled]: (state, { payload }) => {
       state.loading = false
       state.success = true
-      state.userInfo = payload.data
+      state.userInfo = payload?.data
     },
     [registerUser.rejected]: (state, { payload }) => {
       state.loading = false
