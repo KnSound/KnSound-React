@@ -5,7 +5,7 @@ import { StyledNavLink } from "./StyledLinks";
 export const StyledHeader = styled.header`
   display: flex;
   justify-content: space-around;
-  height: 65px;
+  height: 55px;
   background-color: #000000;
 `;
 
@@ -37,7 +37,7 @@ export const StyledDropDownContent = styled.div`
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   transition: .1s ease-in-out;
-  padding: 12px 16px;
+  padding: 12px 12px;
 
   &:hover {
     display: block;

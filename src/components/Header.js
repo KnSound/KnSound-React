@@ -16,8 +16,7 @@ import { BsPerson } from "react-icons/bs";
 import { RiPlayListFill } from "react-icons/ri";
 import { MdLogout } from "react-icons/md"
 import { IoMdArrowDropdown } from "react-icons/io"
-
-import styled from "styled-components";
+import { CiSettings } from "react-icons/ci";
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.user)
@@ -41,9 +40,12 @@ const Header = () => {
                 {userInfo?.username} <IoMdArrowDropdown/>
                 <StyledDropDownContent>
                   <StyledNavLink to='/user-profile'><BsPerson/>Profile</StyledNavLink>
-                  <StyledNavLink to='#'><RiPlayListFill/>Playlists</StyledNavLink>
+                  <StyledNavLink to='/playlists'><RiPlayListFill/>Playlists</StyledNavLink>
                   <StyledNavLink to='#'><AiOutlineHeart/>Likes</StyledNavLink>
                   <hr/>
+                  <StyledNavLink to='/settings'>
+                    <CiSettings/>Settings
+                  </StyledNavLink>
                   <StyledNavLink onClick={() => dispatch(userLogout())}>
                     <MdLogout/>Logout
                   </StyledNavLink>

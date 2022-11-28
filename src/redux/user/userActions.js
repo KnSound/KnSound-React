@@ -49,7 +49,7 @@ export const registerUser = createAsyncThunk(
         { username, email, password }
       )
 
-      return data?.data?.data;
+      return data?.data;
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message)

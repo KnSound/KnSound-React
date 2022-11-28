@@ -3,21 +3,21 @@ import { useEffect } from "react";
 import { useDispatch } from 'react-redux'
 import { getUserDetails } from '../redux/user/userActions'
 
-const ProfilePage = () => {
+function ProfilePage() {
   const { userInfo } = useSelector((state) => state.user)
-
+  const dispatch = useDispatch()
 
   useEffect( () => {
-    // dispatch(getUserDetails());
-  })
+    dispatch(getUserDetails());
+  }, [])
 
   return (
     <div>
-      <figure>{userInfo?.username}</figure>
-      <span>
+      <h2>{userInfo?.username}</h2>
+      <p>
         Welcome <strong>{userInfo?.username}!</strong> You can view this page
         because you're logged in
-      </span>
+      </p>
     </div>
   )
 }

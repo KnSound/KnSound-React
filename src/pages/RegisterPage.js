@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Error from '../components/Error'
 import { registerUser } from '../redux/user/userActions'
 
-const RegisterPage = () => {
+function RegisterPage() {
   const [customError, setCustomError] = useState(null)
 
   const { loading, userInfo, error, success } = useSelector(

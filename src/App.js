@@ -5,13 +5,18 @@ import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
 import HomePage from './pages/HomePage'
 import ProtectedRoute from './features/ProtectedRoute'
+import SettingsPage from "./pages/SettingsPage";
+import PlaylistsPage from "./pages/PlaylistsPage";
+import { PageContainer } from "./styled/styles";
 import './App.css'
+
+
 
 function App() {
   return (
     <Router>
       <Header />
-      <main className='container content'>
+      <PageContainer>
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
@@ -19,8 +24,10 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path='/user-profile' element={<ProfilePage />} />
           </Route>
+          <Route path='/settings' element={<SettingsPage />} />
+          <Route path='/playlists' element={<PlaylistsPage />} />
         </Routes>
-      </main>
+      </PageContainer>
     </Router>
   )
 }

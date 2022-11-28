@@ -5,7 +5,7 @@ import { userLogin } from '../redux/user/userActions'
 import { useEffect } from 'react'
 import Error from '../components/Error'
 
-const LoginPage = () => {
+function LoginPage() {
   const { loading, userInfo, error } = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
