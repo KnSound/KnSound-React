@@ -1,34 +1,26 @@
 import styled from "styled-components";
-import { PageSection, PageLineSeparator, PageSectionName, StyledPlaylistsWrapper } from "../styled/styles";
+import {PageSection, PageLineSeparator, PageSectionName, StyledPlaylistsWrapper} from "../styled/styles";
 import Playlist from "../components/Playlist";
-
-
-
-const StyledPlaylistName = styled.h2`
-  
-`;
-
-const StyledPlaylistCard = styled.div`
-  
-`;
+import {useGetMyPlaylistsQuery} from "../redux/knSoundApi";
 
 function PlaylistsPage() {
-  return (
-    <PageSection>
-      <PageSectionName>My playlists</PageSectionName>
-      <PageLineSeparator/>
-      <StyledPlaylistsWrapper>
-        <Playlist/>
-        <Playlist/>
-        <Playlist/>
-        <Playlist/>
-        <Playlist/>
-        <Playlist/>
-        <Playlist/>
+    const { data, error, isLoading } = useGetMyPlaylistsQuery();
 
-      </StyledPlaylistsWrapper>
-    </PageSection>
-  )
+    if (isLoading) return <h1>Loading...</h1>
+
+    if (error) return <h1>Error</h1>
+
+    return (
+        <PageSection>
+            <PageSectionName>My playlists</PageSectionName>
+            <PageLineSeparator/>
+            <StyledPlaylistsWrapper>
+                {data.map(playlist => (
+                    <Playlist key={playlist?.id} playlist={playlist}/>
+                ))}
+            </StyledPlaylistsWrapper>
+        </PageSection>
+    )
 }
 
 export default PlaylistsPage

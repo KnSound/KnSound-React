@@ -58,13 +58,13 @@ const PlayButton = styled(BsPlayCircle)`
   stroke-width: 1px;
 `;
 
-function Playlist() {
+function Playlist({playlist}) {
   return (
     <PlaylistWrapper>
-      <PlaylistImage src={SecondBgImage}/>
+      <PlaylistImage src={playlist?.image_url}/>
       <PlayButton/>
       <PlaylistBar>
-        <PlaylistName>Test name</PlaylistName>
+        <PlaylistName>{playlist?.title}</PlaylistName>
       </PlaylistBar>
 
     </PlaylistWrapper>

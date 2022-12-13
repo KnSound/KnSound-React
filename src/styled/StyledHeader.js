@@ -31,7 +31,7 @@ export const StyledDropDownContent = styled.div`
   z-index: 1;
   border: 1px solid white;
   border-radius: 5px;
-  top: 26px;
+  top: 25px;
   left: 0;
   background-color: #000000;
   min-width: 160px;
@@ -44,11 +44,18 @@ export const StyledDropDownContent = styled.div`
   }
 `;
 
-export const StyledDropDown = styled(StyledNavLink)`
-  position: relative;
+export const StyledDropDown = styled.div`
+  margin: 10px;
+  width: 100%;
   display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 16pt;
+  color: white;
+  position: relative;
   justify-content: center;
-  gap: 0px;
+  gap: 0;
+  cursor: pointer;
 
   &:hover ${StyledDropDownContent} {
     display: block;
