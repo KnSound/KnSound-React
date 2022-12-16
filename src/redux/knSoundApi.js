@@ -8,8 +8,11 @@ export const knSoundApi = createApi({
     endpoints: (build) => ({
         getMyPlaylists: build.query({
             query: () => `playlists`,
+        }),
+        showPlaylist: build.query({
+            query: (q) => `playlist/${q}`,
         })
     })
 });
 
-export const { useGetMyPlaylistsQuery } = knSoundApi;
+export const { useGetMyPlaylistsQuery, useShowPlaylistQuery } = knSoundApi;

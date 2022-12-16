@@ -1,0 +1,14 @@
+import styled, { css } from "styled-components";
+import { useSelector } from "react-redux";
+
+const TrackCardWrapper = styled.div`
+    width: 100px;
+    height: 100%;
+    display: flex;
+`;
+
+export default function TrackCard() {
+    const { tracks } = useSelector((state) => state.player);
+
+    
+}

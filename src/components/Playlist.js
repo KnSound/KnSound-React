@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { BsPlayCircle } from "react-icons/bs";
-
-import BgImage from "../shared/playlist_cover.png"
-import SecondBgImage from "../shared/song-cover-2.png"
+import { BsPauseCircle } from "react-icons/bs";
+import { setPlaylist } from "../redux/player/playlistSlice";
+import { useDispatch, useSelector } from 'react-redux'
+import { setIsPlaying } from "../redux/player/playerSlice";
 
 const PlaylistImage = styled.img`
   height: 100%;
@@ -24,7 +25,7 @@ const PlaylistWrapper = styled.div`
 
   ${PlaylistImage}:hover {
     transform: scale(1.1);
-  } 
+  }
 `;
 
 const PlaylistBar = styled.div`
@@ -58,15 +59,40 @@ const PlayButton = styled(BsPlayCircle)`
   stroke-width: 1px;
 `;
 
-function Playlist({playlist}) {
+const PauseButton = styled(BsPauseCircle)`
+  pointer-events: none;
+  position: absolute;
+  font-size: 32pt;
+  fill: none;
+  stroke: #ececec;
+  stroke-width: 1px;
+`;
+
+function Playlist({ playlist }) {
+  const activePlayList = useSelector((state) => state.playlist)
+  const { isPlaying } = useSelector((state) => state.player)
+  const dispatch = useDispatch()
+
+  function isPlaylistActive() {
+    return activePlayList?.id === playlist?.id;
+  }
+
+  function toggleActivePlaylist() {
+    if (isPlaylistActive()) {
+      return dispatch(setIsPlaying(!isPlaying))
+    }
+
+    dispatch(setPlaylist(playlist));
+    dispatch(setIsPlaying(true))
+  }
+
   return (
-    <PlaylistWrapper>
-      <PlaylistImage src={playlist?.image_url}/>
-      <PlayButton/>
+    <PlaylistWrapper onClick={() => toggleActivePlaylist()}>
+      <PlaylistImage src={playlist?.image_url} />
+      {isPlaylistActive() ? <PauseButton /> : <PlayButton />}
       <PlaylistBar>
         <PlaylistName>{playlist?.title}</PlaylistName>
       </PlaylistBar>
-
     </PlaylistWrapper>
   )
 }
