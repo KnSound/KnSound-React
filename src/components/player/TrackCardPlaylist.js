@@ -165,11 +165,8 @@ export default function TrackCardPlaylist() {
         if (!droppedItem.destination) return;
 
         var updatedList = [...currentTrackList];
-        // Remove dragged item
         const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
-        // Add dropped item
         updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-        // Update State
         dispatch(setTrackIndex(droppedItem.destination.index))
         dispatch(setTrackList(updatedList))
     };

@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { 
+import {
     setIsPlaying,
     setDuration,
     setTrackProgress,
@@ -18,11 +18,23 @@ const TrackCardWrapper = styled.div`
     width: 260px;
     height: 100%;
     background-color: white;
+    margin: 0;
+    user-select: none;
+`;
+
+const TrackCardContent = styled.div`
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 260px;
+    height: 100%;
+    background-color: white;
     padding: 0 5px 0 0;
     margin: 0;
     gap: 5px;
-    user-select: none;
 `;
+
 
 const TrackImageWrapper = styled.div`
     aspect-ratio : 1 / 1;
@@ -57,7 +69,7 @@ const TrackAuthor = styled.h4`
     color: gray;
 `;
 
- const TrackImage = styled.img`
+const TrackImage = styled.img`
     display: block;
     width: 100%;
     height: 100%;
@@ -79,7 +91,7 @@ export default function TrackCard() {
             author: {
                 id: author_id,
                 username: author_name
-             } = {
+            } = {
                 id: 0,
                 username: "Unknown",
             },
@@ -112,16 +124,19 @@ export default function TrackCard() {
         dispatch(setIsPlaylistShown(!isPlaylistShown))
     }
 
-    return(
-        <TrackCardWrapper onClick={() => handleTrackClick()}>
-            <TrackImageWrapper>
-                <TrackImage src={track_image} />
-            </TrackImageWrapper>
-            <TrackTitleWrapper>
-                <TrackTitle>{truncateTitle(track_title)}</TrackTitle>
-                <TrackAuthor>{author_name}</TrackAuthor>
-            </TrackTitleWrapper>
-            { true && <TrackCardPlaylist /> }
+    return (
+        <TrackCardWrapper>
+            <TrackCardContent onClick={() => handleTrackClick()} >
+                <TrackImageWrapper>
+                    <TrackImage src={track_image} />
+                </TrackImageWrapper>
+                <TrackTitleWrapper>
+                    <TrackTitle>{truncateTitle(track_title)}</TrackTitle>
+                    <TrackAuthor>{author_name}</TrackAuthor>
+                </TrackTitleWrapper>
+            </TrackCardContent>
+
+            {isPlaylistShown && <TrackCardPlaylist />}
         </TrackCardWrapper>
     )
 }
