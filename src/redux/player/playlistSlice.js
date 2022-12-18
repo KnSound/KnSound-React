@@ -15,6 +15,13 @@ const playlistSlice = createSlice({
           state.title = action?.payload?.title;
           state.image_url = action?.payload?.image_url;
           state.tracks = action?.payload?.tracks
+          state.author = action?.payload?.author
+        },
+        removeTrackByIndex(state, action) {
+            state.tracks = state.tracks.filter((track, index) => index !== action?.payload)
+        },
+        addTrackWithIndex(state, action) {
+            state.tracks.splice(action?.payload?.index, 0, action?.payload?.track)
         },
     },
 })

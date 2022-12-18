@@ -3,7 +3,7 @@ import { BsPlayCircle } from "react-icons/bs";
 import { BsPauseCircle } from "react-icons/bs";
 import { setPlaylist } from "../redux/player/playlistSlice";
 import { useDispatch, useSelector } from 'react-redux'
-import { setIsPlaying } from "../redux/player/playerSlice";
+import { setIsPlaying, setTrackIndex, setTrackList } from "../redux/player/playerSlice";
 
 const PlaylistImage = styled.img`
   height: 100%;
@@ -82,8 +82,10 @@ function Playlist({ playlist }) {
       return dispatch(setIsPlaying(!isPlaying))
     }
 
+    dispatch(setTrackList(playlist?.tracks));
     dispatch(setPlaylist(playlist));
-    dispatch(setIsPlaying(true))
+    dispatch(setTrackIndex(0));
+    dispatch(setIsPlaying(true));
   }
 
   return (

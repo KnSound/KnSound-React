@@ -7,8 +7,16 @@ import { TbPlayerSkipForward } from "react-icons/tb";
 import { TbPlayerSkipBack } from "react-icons/tb";
 import { useEffect, useRef, useState } from "react";
 import { setPlaylist } from '../../redux/player/playlistSlice';
-import { setIsPlaying, setVolume } from '../../redux/player/playerSlice';
+import {
+  setIsPlaying,
+  setDuration,
+  setTrackProgress,
+  setTrackIndex,
+  setTrack
+} from '../../redux/player/playerSlice';
 import VolumeRange from './VolumeRange';
+import { AiOutlineUnorderedList } from 'react-icons/ai';
+import TrackCard from './TrackCard.js';
 
 const AudioPlayerWrapper = styled.div`
   position: fixed;
@@ -19,9 +27,18 @@ const AudioPlayerWrapper = styled.div`
   align-items: center;
   width: 100vw;
   height: 60px;
-  padding: 0 50px;
   background-color: #000000;
 `;
+
+const AudioPlayerContentWrapper = styled.div`
+  width: 100vw; 
+  max-width: 1200px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
 const ControlsWrapper = styled.div`
   width: 150px;
   display: flex;
@@ -66,83 +83,86 @@ const Range = styled.input.attrs({ type: 'range' })`
   border-radius: 5px;
   margin: 0;
   padding: 0;
+  accent-color: white;
 `;
 
-const TrackTitle = styled.h2`
-  color: white;
+const PlayerProgress = styled.audio`
+  width: 100%;
 `;
+
 
 export default function AudioPlayer() {
-  const { id: playlsit_id, title: playlist_title, image_url: playlist_image, tracks } = useSelector((state) => state.playlist)
-  // const {data: fetchedPlaylist, error, isLoading} = useShowPlaylistQuery(id)
+  const {
+    isPlaying: currentIsPlaying,
+    volume: currentVolume,
+    duration: currentDuration,
+    trackProgress: currentTrackProgress,
+    trackIndex: currentTrackIndex,
+    trackList: playlist_tracks,
+    track: {
+      id: track_id,
+      title: track_title,
+      image_url: track_image,
+      track_url: track_url,
+      author: { id: author_id } = {
+        id: 0,
+        username: "Unknown",
+      },
+    }
+  } = useSelector((state) => state.player)
+
+  const {
+    id: playlsit_id,
+    title: playlist_title,
+  } = useSelector((state) => state.playlist)
 
   const dispatch = useDispatch()
 
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
-  const [trackProgress, setTrackProgress] = useState(0)
-  const { volume: currentVolume } = useSelector((state) => state.player)
-  const { isPlaying } = useSelector((state) => state.player)
-
-  const isReady = useRef(false)
-
-  const { id: track_id, title: track_title, image_url: track_imgae, track_url } = tracks[currentTrackIndex];
-  
-  const playerRef = useRef()
-  const intervalRef = useRef()
-
-  // const { duration } = playerRef.current;
-  const [duration, setDuration] = useState(0)
-
-  const onScrub = (value) => {
-    setTrackProgress(value);
-    playerRef.current.currentTime = value;
-  };
+  const audioPlayer = useRef();   // reference our audio component
+  const progressBar = useRef(0);   // reference our progress bar
+  const animationRef = useRef();  // reference the animation
 
   useEffect(() => {
-    setCurrentTrackIndex(0)
-    playerRef.current = new Audio(track_url);
-    setDuration(playerRef.current.duration)
-  }, [playlsit_id])
-
-  useEffect(() => {
-    console.log("progress changed")
-  }, [playerRef?.current?.currentTime])
-
-  useEffect(() => {
-    setCurrentTrackIndex(0)
+    dispatch(setTrack(playlist_tracks[currentTrackIndex]));
     dispatch(setIsPlaying(true))
-
-    return function cleanup() {
-      playerRef.current.pause()
-    }
   }, [])
 
   useEffect(() => {
-    playerRef.current.pause()
-    setTrackProgress(0)
-    
-    playerRef.current = new Audio(track_url);
-    setDuration(playerRef.current.duration)
-    setTrackProgress(playerRef.current.currentTime);
-    playerRef.current.volume = currentVolume;
-    playerRef.current.addEventListener('canplay', () => {
-      playerRef.current.play()
-    })
-    playerRef.current.addEventListener('timeupdate', () => {
-      setTrackProgress(playerRef.current.currentTime);
-    });
-
-    return function cleanup() {
-      playerRef.current.removeEventListener('timeupdate', () => {
-        setTrackProgress(playerRef.current.currentTime);
-      });
-    }
-  }, [track_id, playlsit_id]);
+    dispatch(setTrackIndex(0));
+    dispatch(setTrack(playlist_tracks[currentTrackIndex]));
+  }, [playlsit_id])
 
   useEffect(() => {
-    playerRef.current.volume = currentVolume;
+    if (currentIsPlaying) {
+      setTimeout(() => {
+        audioPlayer.current.play();
+      }, 100);
+    } else {
+      setTimeout(() => {
+        audioPlayer.current.pause();
+      }, 100);
+    }
+
+    return function cleanup() {
+      audioPlayer.current.removeEventListener('canplay', () => {
+        audioPlayer.current.pause();
+      });
+    }
+  }, [currentIsPlaying, track_id, playlsit_id]);
+
+  // set duration
+  useEffect(() => {
+    const seconds = Math.floor(audioPlayer.current?.duration);
+    dispatch(setDuration(seconds));
+    // progressBar.current.max = seconds;
+  }, [audioPlayer?.current?.loadedmetadata, audioPlayer?.current?.readyState]);
+
+  // update volume
+  useEffect(() => {
+    audioPlayer.current.volume = currentVolume;
   }, [currentVolume]);
 
+  //add media session
   useEffect(() => {
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
@@ -167,33 +187,27 @@ export default function AudioPlayer() {
         PlayNextTrack();
       });
 
-      playerRef.current.addEventListener('ended', () => {
+      audioPlayer.current.addEventListener('ended', () => {
         PlayNextTrack();
       });
 
+      audioPlayer.current.addEventListener('timeupdate', () => {
+        dispatch(setTrackProgress(audioPlayer.current?.currentTime + 0.2))
+      });
+
       return function cleanup() {
-        playerRef.current.removeEventListener('ended', () => {
+        audioPlayer.current.removeEventListener('ended', () => {
           PlayNextTrack();
         });
+        audioPlayer.current.removeEventListener('timeupdate', () => { });
       }
     }
   }, [track_id, playlsit_id]);
 
-  useEffect(() => {
-    if (isPlaying) {    
-      // check if the audio is ready to play using audioRef.current.readyState
-      if (playerRef.current.readyState === 4) {
-        playerRef.current.play()
-      }
-    } else {
-      playerRef.current.pause();
-    }
-    return function cleanup() {
-      playerRef.current.removeEventListener('canplay', () => {
-        playerRef.current.pause();
-      });
-    }
-  }, [isPlaying, track_id, playlsit_id]);
+  const changeRange = (value) => {
+    dispatch(setTrackProgress(value));
+    audioPlayer.current.currentTime = value;
+  }
 
   function PauseAudio() {
     dispatch(setIsPlaying(false))
@@ -204,47 +218,58 @@ export default function AudioPlayer() {
   }
 
   function PlayNextTrack() {
-    if (isNextTrackPresent()) { setCurrentTrackIndex(currentTrackIndex + 1); }
+    if (isNextTrackPresent()) {
+      dispatch(setTrack(playlist_tracks[currentTrackIndex + 1]));
+      dispatch(setTrackIndex(currentTrackIndex + 1));
+    }
   }
 
   function PlayPrevTrack() {
-    if (isPrevTrackPresent()) { setCurrentTrackIndex(currentTrackIndex - 1); }
+    if (isPrevTrackPresent()) {
+      dispatch(setTrack(playlist_tracks[currentTrackIndex - 1]));
+      dispatch(setTrackIndex(currentTrackIndex - 1));
+    }
   }
 
   function isNextTrackPresent() {
-    return currentTrackIndex + 1 <= tracks?.length - 1;
+    return currentTrackIndex + 1 <= playlist_tracks?.length - 1;
   }
 
   function isPrevTrackPresent() {
     return currentTrackIndex - 1 >= 0
   }
 
-  function isPlayerPlaying() {
-    return isPlaying;
+  const calculateTime = (secs) => {
+    const minutes = Math.floor(secs / 60);
+    const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+    const seconds = Math.floor(secs % 60);
+    const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    return `${returnedMinutes}:${returnedSeconds}`;
   }
-
-  function onVolumeChange(value) {
-    dispatch(setVolume(value))
-  }
-
-  // if(isLoading || error) return;
 
   return (
     <AudioPlayerWrapper>
-      <ControlsWrapper>
-        {isPrevTrackPresent() ? <Prev onClick={() => PlayPrevTrack()}/> : <PrevInactive/>}
-        {isPlayerPlaying() ? <Pause onClick={() => PauseAudio()}/> : <Play onClick={() => PlayAudio()}/>}
-        {isNextTrackPresent() ? <Next onClick={() => PlayNextTrack()}/> : <NextInactive/>}
-      </ControlsWrapper>
-      <Range
-        value={trackProgress}
-        step="0.1"
-        min="0"
-        max={duration ? duration : `${duration}`}
-        onChange={(e) => onScrub(e.target.value)}
-      />
-      <VolumeRange/>
-      <TrackTitle>{track_title}</TrackTitle>
+      <AudioPlayerContentWrapper>
+        <ControlsWrapper>
+          {isPrevTrackPresent() ? <Prev onClick={() => PlayPrevTrack()} /> : <PrevInactive />}
+          {currentIsPlaying ? <Pause onClick={() => PauseAudio()} /> : <Play onClick={() => PlayAudio()} />}
+          {isNextTrackPresent() ? <Next onClick={() => PlayNextTrack()} /> : <NextInactive />}
+        </ControlsWrapper>
+        <PlayerProgress
+          ref={audioPlayer}
+          src={track_url}
+          p
+        />
+        <Range
+          value={currentTrackProgress}
+          step="0.1"
+          min="0"
+          max={currentDuration > 0 ? currentDuration : 100}
+          onChange={(e) => changeRange(e.target.value)}
+        />
+        <VolumeRange />
+        <TrackCard />
+      </AudioPlayerContentWrapper>
     </AudioPlayerWrapper>
   )
 }

@@ -39,11 +39,11 @@ const Range = styled.input.attrs({ type: 'range' })`
   padding: 0;
 `;
 
-const VolumeRange = styled(Range)`
+const VolumeInput = styled(Range)`
     appearance: slider-vertical;
     width: 100%;
     height: 100%;
-    background: #d3d3d3;
+    accent-color: white;
 `;
 
 const VolumeButtonWrapper = styled.div`
@@ -75,7 +75,7 @@ const VolumeRangeWrapper = styled.div`
 `;
 
 
-export default function volumeRange() {
+export default function VolumeRange() {
     const { volume } = useSelector(state => state.player);
     const [previousVolume, setPreviousVolume] = useState(volume);
     const [isMuted, setIsMuted] = useState(false);
@@ -132,7 +132,7 @@ export default function volumeRange() {
                 isShowing
                 &&
                 <VolumeRangeWrapper onMouseEnter={() => handleHoover(true)} onMouseLeave={() => handleHoover(false)}>
-                    <VolumeRange
+                    <VolumeInput
                         type="range"
                         min="0"
                         max="1"
