@@ -24,6 +24,7 @@ const TrackCardWrapperPlaylist = styled.div`
     border-radius: 5px;
     bottom: 70px;
     right: 0;
+    box-shadow: 0px 2px 7px 6px rgb(0 0 0 / 20%);
     backdrop-filter: blur(3px);
 `;
 
@@ -45,10 +46,10 @@ const PlaylistTitle = styled.h3`
 const PlaylistImage = styled.img`
     z-index: 10;
     position: absolute;
-    top: -3px;
-    left: -3px;
+    top: -1px;
+    left: -1px;
     border-radius: 5px 0 0 0;
-    height: 105%;
+    height: 102%;
     object-fit: cover;
     aspect-ratio: 1 / 1;
 `;
@@ -69,6 +70,7 @@ const PlaylistTracksWrapper = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    overflow: hidden;
 `;
 
 const PlaylistItemWrapper = styled.div`
@@ -92,6 +94,7 @@ const PlaylistItemImage = styled.img`
     aspect-ratio: 1 / 1;
     height: 100%;
     object-fit: cover;
+    cursor: pointer;
 `;
 
 const PlaylistItemTitle = styled.h3`
@@ -119,7 +122,6 @@ export default function TrackCardPlaylist() {
         isPlaying: currentIsPlaying,
         volume: currentVolume,
         duration: currentDuration,
-        trackProgress: currentTrackProgress,
         trackIndex: currentTrackIndex,
         isPlaylistShown,
         trackList: currentTrackList,
@@ -136,7 +138,9 @@ export default function TrackCardPlaylist() {
                 username: "Unknown",
             },
         }
-    } = useSelector((state) => state.player)
+    } = useSelector((state) => {
+        return state.player
+    })
 
     const {
         id: playlsit_id,
@@ -169,26 +173,20 @@ export default function TrackCardPlaylist() {
         updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
 
         dispatch(setTrackList(updatedList))
-
-        // when we drop the track, we want to update the track index
-        // if the track index is greater than the dropped index, we want to decrease the track index by margin
-        // if the track index is less than the dropped index, we want to increase the track index by margin
-        // if the track index is equal to the dropped index, we want to set the track index to the dropped index
-        if (currentTrackIndex > droppedItem.source.index) {
-            dispatch(setTrackIndex(currentTrackIndex - 1))
-        }
-        else if (currentTrackIndex < droppedItem.source.index) {
-            dispatch(setTrackIndex(currentTrackIndex + 1))
-        }
-        else if (currentTrackIndex === droppedItem.source.index) {
-            dispatch(setTrackIndex(droppedItem.destination.index))
-        }
-        
+        const currentTrackIndex = updatedList.findIndex((track) => track.id === track_id)
+        dispatch(setTrackIndex(currentTrackIndex))
     };
+
+    const setTrackOnClick = (value) => {
+        const index  = currentTrackList.findIndex((track) => track.id === value)
+
+        dispatch(setTrackIndex(index));
+        dispatch(setTrack(currentTrackList[index]))
+    }
 
     return (
         <TrackCardWrapperPlaylist>
-            <PlaylistWrapper>
+            <PlaylistWrapper onClick={() => dispatch(setIsPlaylistShown(false))}>
                 <PlaylistTitle>{truncateText(playlist_title)}</PlaylistTitle>
                 <PlaylistImage src={playlist_image} />
                 <PlaylistAuthor>{truncateText(playlist_author_name)}</PlaylistAuthor>
@@ -220,7 +218,7 @@ export default function TrackCardPlaylist() {
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
                                                 >
-                                                    <PlaylistItemImage src={track.image_url} />
+                                                    <PlaylistItemImage src={track.image_url} onClick={(e) => setTrackOnClick(track.id)}/>
                                                     <PlaylistItemTitle>{truncateText(track.title)}</PlaylistItemTitle>
                                                     <PlaylistItemAuthor>{truncateText(track.author.username)}</PlaylistItemAuthor>
                                                 </PlaylistItemWrapper>

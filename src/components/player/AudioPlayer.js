@@ -31,6 +31,7 @@ const AudioPlayerWrapper = styled.div`
 `;
 
 const AudioPlayerContentWrapper = styled.div`
+gap: 5px;
   width: 100vw; 
   max-width: 1200px; 
   display: flex;
@@ -88,6 +89,15 @@ const Range = styled.input.attrs({ type: 'range' })`
 
 const PlayerProgress = styled.audio`
   width: 100%;
+  margin: 5px;
+`;
+
+const DuratonItem = styled.h5`
+display: block;
+width: 50px;
+  margin: 5px;
+  color: white;
+  font-size: 15pt;
 `;
 
 
@@ -96,18 +106,12 @@ export default function AudioPlayer() {
     isPlaying: currentIsPlaying,
     volume: currentVolume,
     duration: currentDuration,
-    trackProgress: currentTrackProgress,
     trackIndex: currentTrackIndex,
     trackList: playlist_tracks,
     track: {
       id: track_id,
       title: track_title,
-      image_url: track_image,
-      track_url: track_url,
-      author: { id: author_id } = {
-        id: 0,
-        username: "Unknown",
-      },
+      track_url: track_url
     }
   } = useSelector((state) => state.player)
 
@@ -118,9 +122,9 @@ export default function AudioPlayer() {
 
   const dispatch = useDispatch()
 
-  const audioPlayer = useRef();   // reference our audio component
-  const progressBar = useRef(0);   // reference our progress bar
-  const animationRef = useRef();  // reference the animation
+  const audioPlayer = useRef();
+  const progressBar = useRef();
+  const timeLeft = useRef({});
 
   useEffect(() => {
     dispatch(setTrack(playlist_tracks[currentTrackIndex]));
@@ -129,7 +133,7 @@ export default function AudioPlayer() {
 
   useEffect(() => {
     dispatch(setTrackIndex(0));
-    dispatch(setTrack(playlist_tracks[currentTrackIndex]));
+    dispatch(setTrack(playlist_tracks[0]));
   }, [playlsit_id])
 
   useEffect(() => {
@@ -143,18 +147,12 @@ export default function AudioPlayer() {
       }, 100);
     }
 
-    return function cleanup() {
-      audioPlayer.current.removeEventListener('canplay', () => {
-        audioPlayer.current.pause();
-      });
-    }
+    syncMaxDuration()
   }, [currentIsPlaying, track_id, playlsit_id]);
 
   // set duration
   useEffect(() => {
-    const seconds = Math.floor(audioPlayer.current?.duration);
-    dispatch(setDuration(seconds));
-    // progressBar.current.max = seconds;
+    syncMaxDuration()
   }, [audioPlayer?.current?.loadedmetadata, audioPlayer?.current?.readyState]);
 
   // update volume
@@ -164,6 +162,8 @@ export default function AudioPlayer() {
 
   //add media session
   useEffect(() => {
+    syncMaxDuration()
+
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: track_title,
@@ -192,7 +192,8 @@ export default function AudioPlayer() {
       });
 
       audioPlayer.current.addEventListener('timeupdate', () => {
-        dispatch(setTrackProgress(audioPlayer.current?.currentTime + 0.2))
+        progressBar.current.value = audioPlayer.current?.currentTime;
+        timeLeft.current.value = calculateTime(Number(progressBar.current?.max) - Number(audioPlayer.current?.currentTime))
       });
 
       return function cleanup() {
@@ -205,7 +206,7 @@ export default function AudioPlayer() {
   }, [track_id, playlsit_id]);
 
   const changeRange = (value) => {
-    dispatch(setTrackProgress(value));
+    progressBar.current.value = value;
     audioPlayer.current.currentTime = value;
   }
 
@@ -229,6 +230,15 @@ export default function AudioPlayer() {
       dispatch(setTrack(playlist_tracks[currentTrackIndex - 1]));
       dispatch(setTrackIndex(currentTrackIndex - 1));
     }
+  }
+
+  function syncMaxDuration() {
+    setTimeout(() => {
+      const seconds = Math.floor(audioPlayer.current?.duration);
+      dispatch(setDuration(seconds));
+      progressBar.current.max = seconds ? seconds : 0;
+    }, 300);
+
   }
 
   function isNextTrackPresent() {
@@ -261,12 +271,13 @@ export default function AudioPlayer() {
           p
         />
         <Range
-          value={currentTrackProgress}
-          step="0.1"
-          min="0"
-          max={currentDuration > 0 ? currentDuration : 100}
+          ref={progressBar}
+          max={currentDuration}
+          defaultValue="0"
+          step={0.1}
           onChange={(e) => changeRange(e.target.value)}
         />
+        <DuratonItem>{calculateTime(progressBar.current?.max || 0)}</DuratonItem>
         <VolumeRange />
         <TrackCard />
       </AudioPlayerContentWrapper>

@@ -77,19 +77,11 @@ const TrackImage = styled.img`
 
 export default function TrackCard() {
     const {
-        isPlaying: currentIsPlaying,
-        volume: currentVolume,
-        duration: currentDuration,
-        trackProgress: currentTrackProgress,
-        trackIndex: currentTrackIndex,
         isPlaylistShown,
         track: {
-            id: track_id,
             title: track_title,
             image_url: track_image,
-            track_url: track_url,
             author: {
-                id: author_id,
                 username: author_name
             } = {
                 id: 0,
@@ -98,19 +90,8 @@ export default function TrackCard() {
         }
     } = useSelector((state) => state.player)
 
-    const {
-        id: playlsit_id,
-        title: playlist_title,
-        image_url: playlist_image,
-        tracks: playlist_tracks
-    } = useSelector((state) => state.playlist)
-
     const dispatch = useDispatch()
-
-
-
-
-
+    
     const truncateTitle = (title) => {
         const truncateLength = 18;
 
