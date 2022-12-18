@@ -167,8 +167,23 @@ export default function TrackCardPlaylist() {
         var updatedList = [...currentTrackList];
         const [reorderedItem] = updatedList.splice(droppedItem.source.index, 1);
         updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
-        dispatch(setTrackIndex(droppedItem.destination.index))
+
         dispatch(setTrackList(updatedList))
+
+        // when we drop the track, we want to update the track index
+        // if the track index is greater than the dropped index, we want to decrease the track index by margin
+        // if the track index is less than the dropped index, we want to increase the track index by margin
+        // if the track index is equal to the dropped index, we want to set the track index to the dropped index
+        if (currentTrackIndex > droppedItem.source.index) {
+            dispatch(setTrackIndex(currentTrackIndex - 1))
+        }
+        else if (currentTrackIndex < droppedItem.source.index) {
+            dispatch(setTrackIndex(currentTrackIndex + 1))
+        }
+        else if (currentTrackIndex === droppedItem.source.index) {
+            dispatch(setTrackIndex(droppedItem.destination.index))
+        }
+        
     };
 
     return (
