@@ -170,6 +170,7 @@ export default function TrackCardPlaylist() {
         // Add dropped item
         updatedList.splice(droppedItem.destination.index, 0, reorderedItem);
         // Update State
+        dispatch(setTrackIndex(droppedItem.destination.index))
         dispatch(setTrackList(updatedList))
     };
 
