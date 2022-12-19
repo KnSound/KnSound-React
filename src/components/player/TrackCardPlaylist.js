@@ -11,6 +11,9 @@ import {
     removeTrackByIndex,
     setTrackWithIndex
 } from '../../redux/player/playerSlice';
+import { TbPlayerPause } from "react-icons/tb";
+import { TbPlayerPlay } from "react-icons/tb";
+
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -84,6 +87,8 @@ const PlaylistItemWrapper = styled.div`
     gap: 5px;
     padding: 5px;
     margin: 2px;
+    cursor: pointer;
+
 `;
 
 const PlaylistItemImage = styled.img`
@@ -94,7 +99,6 @@ const PlaylistItemImage = styled.img`
     aspect-ratio: 1 / 1;
     height: 100%;
     object-fit: cover;
-    cursor: pointer;
 `;
 
 const PlaylistItemTitle = styled.h3`
@@ -115,7 +119,23 @@ const DroppableField = styled.div`
     width: 100%;
 `;
 
+const StyledControlButton = css`
+    color: white;
+    font-size: 20pt;
+    left: 18px;
+    z-index: 100;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+`;
 
+const Pause = styled(TbPlayerPause)`
+    ${StyledControlButton};
+`;
+
+const Play = styled(TbPlayerPlay)`
+  ${StyledControlButton};
+`;
 
 export default function TrackCardPlaylist() {
     const {
@@ -158,7 +178,7 @@ export default function TrackCardPlaylist() {
 
     // create a function to truncate the title by 20 characters with dots
     const truncateText = (title) => {
-        const truncateBy = 20;
+        const truncateBy = 17;
         if (title?.length > truncateBy) {
             return title.slice(0, truncateBy) + '...';
         }
@@ -178,12 +198,30 @@ export default function TrackCardPlaylist() {
     };
 
     const setTrackOnClick = (value) => {
-        const index  = currentTrackList.findIndex((track) => track.id === value)
+        if (track_id == value) {
+            return dispatch(setIsPlaying(!currentIsPlaying))
+        }
+
+        const index = currentTrackList.findIndex((track) => track.id === value)
 
         dispatch(setTrackIndex(index));
         dispatch(setTrack(currentTrackList[index]))
     }
 
+    function toggleActiveTrack() {
+        if (isPlaylistActive()) {
+          return dispatch(setIsPlaying(!isPlaying))
+        }
+    
+        dispatch(setTrackList(playlist?.tracks));
+        dispatch(setPlaylist(playlist));
+        dispatch(setTrackIndex(0));
+        dispatch(setIsPlaying(true));
+      }
+
+    const isCurrentTrackIsPlaying = (value) => {
+        value == track_id
+    }
     return (
         <TrackCardWrapperPlaylist>
             <PlaylistWrapper onClick={() => dispatch(setIsPlaylistShown(false))}>
@@ -217,8 +255,20 @@ export default function TrackCardPlaylist() {
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
+                                                    onClick={(e) => setTrackOnClick(track.id)} 
                                                 >
-                                                    <PlaylistItemImage src={track.image_url} onClick={(e) => setTrackOnClick(track.id)}/>
+                                                    { (track_id == track.id)
+                                                        ? 
+                                                            (currentIsPlaying) 
+                                                                ? 
+                                                                    <Pause />
+                                                                :
+                                                                    <Play/>
+                                                        :
+                                                            <></>
+
+                                                    }
+                                                    <PlaylistItemImage src={track.image_url} />
                                                     <PlaylistItemTitle>{truncateText(track.title)}</PlaylistItemTitle>
                                                     <PlaylistItemAuthor>{truncateText(track.author.username)}</PlaylistItemAuthor>
                                                 </PlaylistItemWrapper>

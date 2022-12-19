@@ -50,6 +50,7 @@ const StyledControlButton = css`
   color: white;
   font-size: 20pt;
 `;
+
 const Play = styled(TbPlayerPlay)`
   ${StyledControlButton};
 `;
@@ -74,7 +75,8 @@ const Pause = styled(TbPlayerPause)`
 `;
 
 const Range = styled.input.attrs({ type: 'range' })`
-  width: 50%;
+  width: 100%;
+  max-width: 60vh;
   height: 5px;
   background: #d3d3d3;
   outline: none;
@@ -88,7 +90,6 @@ const Range = styled.input.attrs({ type: 'range' })`
 `;
 
 const PlayerProgress = styled.audio`
-  width: 100%;
   margin: 5px;
 `;
 
