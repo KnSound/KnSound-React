@@ -22,10 +22,6 @@ const PlaylistWrapper = styled.div`
   justify-content: center;
   transition: transform .2s; /* Animation */
   animation: sl;
-
-  ${PlaylistImage}:hover {
-    transform: scale(1.1);
-  }
 `;
 
 const PlaylistBar = styled.div`
