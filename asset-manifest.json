@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.6c59325b.css",
+    "main.js": "/static/js/main.a0812efb.js",
+    "static/media/KnSoundLogo.svg": "/static/media/KnSoundLogo.666bdfd0584f00d065b4464706e43075.svg",
+    "index.html": "/index.html",
+    "main.6c59325b.css.map": "/static/css/main.6c59325b.css.map",
+    "main.a0812efb.js.map": "/static/js/main.a0812efb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6c59325b.css",
+    "static/js/main.a0812efb.js"
+  ]
+}
