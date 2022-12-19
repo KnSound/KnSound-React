@@ -1,0 +1,121 @@
+input[data-autocompleted] {
+    background-color: black !important;
+}
+
+.form input {
+    background-color: black !important;
+    height: 150%;
+    padding-top: 20px;
+    border: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.5rem 1rem;
+    margin-bottom: 2rem;
+
+    width: 100%;
+    color: white;
+}
+
+.form input:active {
+    background-color: black;
+    color: white;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    border: none;
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.form input:focus {
+    outline: none;
+}
+
+.form input:focus+.label-name .content-name,
+.form input:valid+.label-name .content-name {
+    transform: translateY(-150%);
+    font-size: 14px;
+    left: 0px;
+    color: #fce38a;
+}
+
+.form input:focus+.label-name::after,
+.form input:valid+.label-name::after {
+    transform: translateX(0%);
+}
+
+.form label {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 70%;
+    pointer-events: none;
+    border-bottom: 1px solid white;
+    color: white;
+}
+
+.form label::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-100%);
+
+}
+
+.content-name {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    padding-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.register {
+    background-color: black;
+    padding: 4%;
+    border: solid 0px white;
+    transition: border-width 0.2s linear;
+    border-radius: 20px;
+}
+
+
+.button:hover {
+    background-color: #394549;
+    border-radius: 9px;
+    transition: all 0.5s;
+}
+
+.welcome {
+    color: beige;
+}
+
+.label-name {
+    color: white;
+}
+
+h1 {
+    color: white;
+}
+
+.form {
+    width: 70%;
+    margin: 0 auto;
+    position: relative;
+    height: 60px;
+    overflow: hidden;
+    background-color: black;
+}

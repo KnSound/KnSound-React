@@ -2,6 +2,18 @@ import axios from "axios";
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import '../../features/interceptors/axios'
 
+let message;
+
+const someThunk = createAsyncThunk(
+
+async (arg, thunkAPI) => {
+    try {
+        const value = await promiseFunc()
+        return value
+    } catch(e) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+});
 
 export const userLogin = createAsyncThunk(
   'user/login',
@@ -15,7 +27,7 @@ export const userLogin = createAsyncThunk(
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message)
+        return rejectWithValue(error.response.data.message === message)
       } else {
         return rejectWithValue(error.message)
       }
@@ -76,3 +88,5 @@ export const getUserDetails = createAsyncThunk(
     }
   }
 )
+
+export default message

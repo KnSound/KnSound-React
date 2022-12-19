@@ -23,7 +23,7 @@ const TrackCardWrapperPlaylist = styled.div`
     width: 300px;
     height: 400px;
     background: transparent;
-    border: solid black;
+    border: solid white;
     border-radius: 5px;
     bottom: 70px;
     right: 0;
@@ -34,9 +34,9 @@ const TrackCardWrapperPlaylist = styled.div`
 const PlaylistWrapper = styled.div`
     position: relative;
     width: 100%;
-    border-width:0 !important;
     height: 60px;
     background: rgba(0, 0, 0, 1);
+    border-bottom: 1px solid white;
 `;
 
 const PlaylistTitle = styled.h3`
@@ -49,10 +49,10 @@ const PlaylistTitle = styled.h3`
 const PlaylistImage = styled.img`
     z-index: 10;
     position: absolute;
-    top: -1px;
-    left: -1px;
+    top: 0px;
+    left: 0px;
     border-radius: 5px 0 0 0;
-    height: 102%;
+    height: 100%;
     object-fit: cover;
     aspect-ratio: 1 / 1;
 `;
@@ -103,9 +103,10 @@ const PlaylistItemImage = styled.img`
 
 const PlaylistItemTitle = styled.h3`
     position: absolute;
+  font-size: 14pt;
     top: 5px;
     left: 65px;
-    color: black;
+    color: white;
 `;
 
 const PlaylistItemAuthor = styled.h4`

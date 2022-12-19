@@ -6,7 +6,11 @@ export const StyledHeader = styled.header`
   display: flex;
   justify-content: space-around;
   height: 55px;
-  background-color: #000000;
+  background-color: black;
+  border-bottom: 1px solid white;
+  z-index: 100;
+  position: fixed;
+  width: 100vw;
 `;
 
 export const StyledNav = styled.nav`

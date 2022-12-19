@@ -7,6 +7,7 @@ import Logo from "../shared/KnSoundLogo.svg"
 import styled from "styled-components";
 
 const PageContainer = styled.main`
+  position: relative;
   display: flex;
   height: 80vh;
   max-width: 60%;
@@ -22,14 +23,14 @@ const PageSection = styled.div`
 `;
 
 const PageSectionName = styled.h2`
-  color: black;
+  color: white;
   margin: 10px;
 `;
 
 const PageLineSeparator = styled.hr`
   margin: 10px;
-  background: black;
-  height: 4px;
+  background: white;
+  height: 2px;
   border: 0px;
 `;
 

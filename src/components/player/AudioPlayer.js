@@ -28,6 +28,7 @@ const AudioPlayerWrapper = styled.div`
   width: 100vw;
   height: 60px;
   background-color: #000000;
+  border-top: 1px solid white;
 `;
 
 const AudioPlayerContentWrapper = styled.div`
