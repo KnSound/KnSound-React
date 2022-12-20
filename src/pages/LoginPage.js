@@ -4,6 +4,31 @@ import { useDispatch, useSelector } from 'react-redux'
 import { userLogin } from '../redux/user/userActions'
 import { useEffect } from 'react'
 import Error from '../components/Error'
+import styled from 'styled-components'
+import "../styled/login.css"
+
+export const Button = styled.button`
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #5f0c36;
+  color: white;
+  border-radius: 5px;
+  transition: 0.3s background-color ease-out;
+  border-radius:  79px;
+  transition: all 0.5s;
+  width: 50%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2em;
+`;
+
+
+
+
+
+
 
 const LoginPage = () => {
   const { loading, userInfo, error } = useSelector((state) => state.user)
@@ -24,29 +49,41 @@ const LoginPage = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(submitForm)}>
+    <form autocomplete="off" onSubmit={handleSubmit(submitForm)} >
       {error && <Error>{error}</Error>}
-      <div className='form-group'>
-        <label htmlFor='email'>Email</label>
-        <input
+      <h1>  Welcome</h1>
+
+      <div className='form'>
+        <input  autocomplete="off"
           type='email'
-          className='form-input'
           {...register('email')}
           required
         />
+        <label for="text" class="label-name">
+          <span class="content-name">
+            Email
+          </span>
+        </label>
       </div>
-      <div className='form-group'>
-        <label htmlFor='password'>Password</label>
-        <input
+
+
+      <div className='form'>
+        <input autocomplete="off"
           type='password'
-          className='form-input'
           {...register('password')}
           required
         />
+        <label for="text" class="label-name" >
+          <span class="content-name">
+            Password
+          </span>
+        </label>
       </div>
-      <button type='submit' className='button' disabled={loading}>
+
+      <Button>
         Login
-      </button>
+      </Button>
+
     </form>
   )
 }

@@ -11,7 +11,16 @@ function App() {
   return (
     <Router>
       <Header />
+      
       <main className='container content'>
+        
+      <div class="background">
+       <div class="cube"></div>
+       <div class="cube"></div>
+       <div class="cube"></div>
+       <div class="cube"></div>
+      <div class="cube"></div>
+    </div>
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
@@ -21,6 +30,7 @@ function App() {
           </Route>
         </Routes>
       </main>
+
     </Router>
   )
 }

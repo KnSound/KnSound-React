@@ -1,4 +1,3 @@
-import { Dropdown } from "semantic-ui-react";
 
 const HomePage = () => {
   return(

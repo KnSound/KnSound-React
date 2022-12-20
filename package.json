@@ -1,6 +1,7 @@
 {
   "name": "knsound-react",
   "proxy": "https://knsound-rails.herokuapp.com/api/",
+  "allowedHosts": "knsound-rails.herokuapp",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
