@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const KnSoundApiUrl = 'https://knsound-rails.herokuapp.com/api/'
+export const KnSoundApiUrl = process.env.REACT_APP_API_URL
 
 export const knSoundApi = createApi({
     reducerPath: 'knSoundApi',

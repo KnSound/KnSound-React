@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## config local dev:
+create .env file in project directory and set rails api base url:
+
+REACT_APP_API_URL=http://localhost:3000/api
+
+
 ## Available Scripts
 
 In the project directory, you can run:
