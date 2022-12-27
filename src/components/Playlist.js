@@ -1,54 +1,68 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { BsPlayCircle } from "react-icons/bs";
 import { BsPauseCircle } from "react-icons/bs";
 import { setPlaylist } from "../redux/player/playlistSlice";
 import { useDispatch, useSelector } from 'react-redux'
+import { TbPlayerPlay } from "react-icons/tb";
+import { TbPlayerPause } from "react-icons/tb";
 import { setIsPlaying, setTrackIndex, setTrackList } from "../redux/player/playerSlice";
 
+const StyledControlButton = css`
+  display: block;
+  color: white;
+  font-size: 20pt;
+`;
+
+const Play = styled(TbPlayerPlay)`
+  ${StyledControlButton};
+`;
+
+const Pause = styled(TbPlayerPause)`
+  ${StyledControlButton};
+`;
+
 const PlaylistImage = styled.img`
-  height: 100%;
-  width: 100%;
+  border-radius: 5px;
+  border: 1px solid white;
+  height: 170px;
+  aspect-ratio: 1/1;
   transition: transform .2s; /* Animation */
 `;
 
 const PlaylistWrapper = styled.div`
   position: relative;
   width: 200px;
-  height: 200px;
+  height: 250px;
   display: flex;
+  flex-direction: column;
+  border: 1px solid white;
+  padding: 10px;
   border-radius: 5px;
   overflow: hidden;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   transition: transform .2s; /* Animation */
   animation: sl;
-`;
-
-const PlaylistBar = styled.div`
-  pointer-events: none;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30px;
-  width: 100%;
-  border-radius: 5px;
-  bottom: 0;
-  background-color: rgba(93, 93, 93, 0.15);
   backdrop-filter: blur(2px);
 `;
 
+const PlaylistBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  width: 100%;
+  border-radius: 5px;
+`;
+
 const PlaylistName = styled.h3`
-  position: absolute;
   color: #ffffff;
   display: block;
-  margin: auto;
+  margin: 0;
   padding: 0;
 `;
 
 const PlayButton = styled(BsPlayCircle)`
-  pointer-events: none;
-  position: absolute;
   font-size: 32pt;
   fill: none;
   stroke: #ececec;
@@ -84,15 +98,34 @@ function Playlist({ playlist }) {
     dispatch(setIsPlaying(true));
   }
 
+  const truncateText = (title) => {
+    const truncateBy = 15;
+    if (title?.length > truncateBy) {
+        return title.slice(0, truncateBy) + '...';
+    }
+    return title;
+}
+
   return (
     <PlaylistWrapper onClick={() => toggleActivePlaylist()}>
       <PlaylistImage src={playlist?.image_url} />
-      {isPlaylistActive() ? <PauseButton /> : <PlayButton />}
       <PlaylistBar>
-        <PlaylistName>{playlist?.title}</PlaylistName>
+        <PlaylistName>{truncateText(playlist?.title)}</PlaylistName>
+        {isPlaylistActive() ?
+          isPlaying ?
+            <Pause /> :
+            <Play /> :  <Play />}
       </PlaylistBar>
     </PlaylistWrapper>
   )
 }
 
 export default Playlist
+
+{/* <PlaylistWrapper onClick={() => toggleActivePlaylist()}>
+      <PlaylistImage src={playlist?.image_url} />
+      {isPlaylistActive() ? <PauseButton /> : <PlayButton />}
+      <PlaylistBar>
+        <PlaylistName>{playlist?.title}</PlaylistName>
+      </PlaylistBar>
+    </PlaylistWrapper> */}
